@@ -22,12 +22,12 @@ namespace is4ui
             {
                 new ApiScope("scope1"),
                 new ApiScope("scope2"),
+                                new ApiScope("api1"),
+
             };
-
-
         public static IEnumerable<Client> Clients =>
-            new List<Client>
-            {
+    new List<Client>
+    {
         // machine to machine client (from quickstart 1)
         new Client
         {
@@ -43,21 +43,35 @@ namespace is4ui
         {
             ClientId = "mvc",
             ClientSecrets = { new Secret("secret".Sha256()) },
-
             AllowedGrantTypes = GrantTypes.Code,
-
             // where to redirect to after login
             RedirectUris = { "https://localhost:7047/signin-oidc" },
-
             // where to redirect to after logout
             PostLogoutRedirectUris = { "https://localhost:7047/signout-callback-oidc" },
-
             AllowedScopes = new List<string>
             {
                 IdentityServerConstants.StandardScopes.OpenId,
                 IdentityServerConstants.StandardScopes.Profile
             }
-        }
-            };
+        },
+        new Client{
+                    ClientId = "js",
+                    ClientName = "JavaScript Client",
+                    AllowedGrantTypes = GrantTypes.Code,
+                    RequireClientSecret = false,
+                    RedirectUris ={ "https://localhost:5003/callback.html" },
+                    PostLogoutRedirectUris = { "https://localhost:5003/index.html" },
+                    AllowedCorsOrigins =     { "https://localhost:5003" },
+                    AllowedScopes =
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                               IdentityServerConstants.StandardScopes.Profile,
+                               "api1"
+
+                    }
+
+                }
+    };
+
     }
 }

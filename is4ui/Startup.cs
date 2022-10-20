@@ -41,7 +41,7 @@ namespace is4ui
 
             // in-memory, code config
             builder.AddInMemoryIdentityResources(Config.IdentityResources);
-           // builder.AddInMemoryApiScopes(Config.ApiScopes);
+            builder.AddInMemoryApiScopes(Config.ApiScopes);
             builder.AddInMemoryClients(Config.Clients);
 
             // not recommended for production - you need to store your key material somewhere secure
@@ -58,6 +58,16 @@ namespace is4ui
                     options.ClientId = "265129948448-ptomg6ta66vc6skehtc2blpsf3b91tb5.apps.googleusercontent.com";
                     options.ClientSecret = "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";
                 });
+            services.AddCors(options =>
+            {
+                // this defines a CORS policy called "default"
+                options.AddPolicy("default", policy =>
+                {
+                    policy.WithOrigins("https://localhost:5003")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                });
+            });
         }
 
         public void Configure(IApplicationBuilder app)
@@ -72,6 +82,10 @@ namespace is4ui
             app.UseRouting();
             app.UseIdentityServer();
             app.UseAuthorization();
+            app.UseRouting();
+
+            app.UseCors("default");
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapDefaultControllerRoute();
